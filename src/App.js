@@ -25,8 +25,9 @@ class App extends Component {
   state = {
     users: [],
     user: {},
+    repos: [],
     loading: false,
-    alert: null
+    alert: null,
   };
 
   // Make API request for all users
@@ -54,8 +55,16 @@ class App extends Component {
     const res = await axios.get(
       `https://api.github.com/users/${username}?client_id=${REACT_APP_GITHUB_CLIENT_ID}&client_secret=${REACT_APP_GITHUB_CLIENT_SECRET}`
     );
-    console.log(res.data);
     this.setState({ user: res.data, loading: false });
+  };
+
+  getUserRepos = async (username) => {
+    // Fetch repos for a specific user
+    this.setState({ loading: true });
+    const res = await axios.get(
+      `https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc&?client_id=${REACT_APP_GITHUB_CLIENT_ID}&client_secret=${REACT_APP_GITHUB_CLIENT_SECRET}`
+    );
+    this.setState({ repos: res.data, loading: false });
   };
 
   clearUsers = () => {
@@ -69,7 +78,7 @@ class App extends Component {
   };
 
   render() {
-    const { users, user, loading, alert } = this.state;
+    const { users, user, repos, loading, alert } = this.state;
     return (
       <Router>
         <div className="App">
@@ -100,7 +109,9 @@ class App extends Component {
                   <UserProfile
                     {...props}
                     getUser={this.getUser}
+                    getUserRepos={this.getUserRepos}
                     user={user}
+                    repos={repos}
                     loading={loading}
                   />
                 )}

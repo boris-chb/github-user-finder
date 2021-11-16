@@ -1,12 +1,14 @@
 import React, { Component } from "react";
-import Spinner from "../layout/Spinner";
 import { Link } from "react-router-dom";
-
 import PropTypes from "prop-types";
+
+import ReposList from "../repos/ReposList";
+import Spinner from "../layout/Spinner";
 
 class UserProfile extends Component {
   componentDidMount() {
     this.props.getUser(this.props.match.params.login);
+    this.props.getUserRepos(this.props.match.params.login);
   }
 
   render() {
@@ -25,7 +27,7 @@ class UserProfile extends Component {
       public_gists,
       hireable,
     } = this.props.user;
-    const { loading } = this.props;
+    const { loading, repos } = this.props;
 
     if (loading) {
       return <Spinner />;
@@ -80,6 +82,7 @@ class UserProfile extends Component {
           <div className="badge badge-light">Repos: {public_repos}</div>
           <div className="badge badge-dark">Gists: {public_gists}</div>
         </div>
+        <ReposList repos={repos} />
       </>
     );
   }
