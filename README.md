@@ -1,2 +1,3 @@
-# git-hub-user-finder
-Created with CodeSandbox
+# Github User Finder - React App
+
+A React App to find users on github.com
